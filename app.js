@@ -1,0 +1,43 @@
+
+// Require dependencies
+var express = require('express');
+var app = express();
+var http = require('http');
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+// Listen for connections
+io.sockets.on('connection', function(socket) {
+
+  console.log("Someone is connecting...");
+  
+  socket.on('join', function(name) {
+    socket.set('nickname', name);
+    console.log(name+" has connected!");
+    socket.broadcast.emit('connected', name + ' has connected!');
+    socket.emit('connected', name + ' has connected!');
+  });
+
+  // Receive messages from the client and broadcast them to everyone
+  socket.on('messages', function(data) {
+    socket.get('nickname', function(err, name) {
+      socket.broadcast.emit("messages", name + ": " + data);
+      socket.emit("messages", name + ": " + data);
+    });
+
+  });
+});
+
+// Without this line, the CSS will not work
+app.use('/public', express.static(__dirname + '/public'));
+
+// Route index.html to the root path
+app.get('/', function(request, response) {
+	response.sendfile(__dirname + "/index.html");
+});
+
+// Listen for GET requests to the server
+var port = process.env.port || 5000;
+server.listen(port, function() {
+  console.log("Listening on port " + port);
+});

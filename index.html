@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chatapp</title>
+		<link rel="stylesheet" type="text/css" href="public/default.css"></link>
+	</head>
+	<body>
+		<h1 class="title">Chatapp</h1>
+
+		<div id="wrapper">
+			<div id="online">
+				
+			</div>
+
+			<div id="body">
+				<div id="status"></div>
+				<div id="chat">
+					<ul class="chatlist">
+
+					</ul>
+				</div>
+			</div>
+
+			<div id="input">
+				<form id="chatform">
+					<input type="text" id="message"></input>
+					<input type="submit" id="send" value="Send!"></input>
+				</form>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			// Wait until DOM is ready
+			$(document).ready(function() {
+
+				// Establish a connection to the server
+				var socket = io.connect('http://localhost:5000');
+
+				// On submit, send the chat form message to the server, prevent default redirect and reset the chat form
+				$('#chatform').submit(function(e) {
+					e.preventDefault();
+					var message = $('#message').val();
+					socket.emit('messages', message);
+					$('#chatform')[0].reset();
+				});
+
+				socket.on('connect', function(data) {
+					nickname = prompt('What is your nickname?');
+					$('#status').html('Connected to Chatapp as ' +nickname);
+					socket.emit('join', nickname);
+				});
+
+				socket.on('connected', function(data) {
+					$('<li class="connected">'+data+'</li>').appendTo('ul.chatlist');
+				});
+
+				// Listen for messages broadcasted to every client by the server - this does not work for some reason.
+				socket.on('messages', function(data) {
+					$('<li>'+data+'</li>').appendTo('ul.chatlist');
+					console.log(data+' messages');
+				});
+			});
+		</script>
+	</body>
+</html>
