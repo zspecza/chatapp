@@ -6,6 +6,12 @@ var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
+// assuming io is the Socket.IO server object
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 // Listen for connections
 io.sockets.on('connection', function(socket) {
 
@@ -37,7 +43,7 @@ app.get('/', function(request, response) {
 });
 
 // Listen for GET requests to the server
-var port = process.env.port || 5000;
+var port = process.env.PORT || 5000;
 server.listen(port, function() {
   console.log("Listening on port " + port);
 });
