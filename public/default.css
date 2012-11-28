@@ -42,7 +42,6 @@ a {
 #chat {
     height: 388px;
     padding: 10px;
-    overflow-y: scroll;
 }
 
 #input {

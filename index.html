@@ -3,6 +3,7 @@
 	<head>
 		<title>Chatapp</title>
 		<link rel="stylesheet" type="text/css" href="public/default.css"></link>
+		<link rel="stylesheet" type="text/css" href="public/jquery.mCustomScrollbar.css"></link>
 	</head>
 	<body>
 		<h1 class="title">Chatapp</h1>
@@ -32,9 +33,14 @@
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		<script src="public/jquery.mousewheel.min.js"></script>
+		<script src="public/jquery.mCustomScrollbar.js"></script>
 		<script>
 			// Wait until DOM is ready
 			$(document).ready(function() {
+
+				$('#chat').mCustomScrollbar();
 
 				// Establish a connection to the server
 				var socket = io.connect(window.location.hostname);
@@ -68,6 +74,8 @@
 				socket.on('messages', function(data) {
 					$('<li>'+data+'</li>').appendTo('ul.chatlist');
 					console.log(data+' messages');
+					$('#chat').mCustomScrollbar("update");
+					$('#chat').mCustomScrollbar("scrollTo", "last");
 				});
 			});
 		</script>
