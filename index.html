@@ -37,7 +37,7 @@
 			$(document).ready(function() {
 
 				// Establish a connection to the server
-				var socket = io.connect('http://localhost:'+process.env.PORT);
+				var socket = io.connect(window.location.hostname);
 
 				// On submit, send the chat form message to the server, prevent default redirect and reset the chat form
 				$('#chatform').submit(function(e) {
