@@ -48,7 +48,14 @@
 				});
 
 				socket.on('connect', function(data) {
-					nickname = prompt('What is your nickname?');
+					var getName = function() {
+						var nickname = prompt('What is your nickname?');
+						while (nickname === null) {
+							nickname = prompt('You have to enter a nickname!');
+						}
+						return nickname;
+					}
+					nickname = getName();
 					$('#status').html('Connected to Chatapp as ' +nickname);
 					socket.emit('join', nickname);
 				});
