@@ -73,6 +73,7 @@ input#message {
 input#message:focus {
     border: none;
     outline: none;
+    box-shadow: inset 1px 1px 3px green, inset -1px -1px 3px green;
 }
 
 input#send {
