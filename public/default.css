@@ -58,18 +58,19 @@ h1.title {
     text-align: center;
 }
 
-input#message {
+textarea#message {
     float: left;
     margin: 0;
-    width: 640px;
-    height: 58px;
+    width: 630px;
+    height: 40px;
+    max-height: 40px;
     border: none;
-    font-size: 28px;
-    padding-left: 10px;
+    padding: 10px;
     box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3);
+    resize: none;
 }
 
-input#message:focus {
+textarea#message:focus {
     border: none;
     outline: none;
     box-shadow: inset 1px 1px 3px green, inset -1px -1px 3px green;
@@ -102,4 +103,7 @@ ul.chatlist {
 
 li.connected {
     color: green;
+}
+li.disconnected {
+    color: red;
 }

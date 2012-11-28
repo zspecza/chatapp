@@ -24,7 +24,7 @@
 
 			<div id="input">
 				<form id="chatform">
-					<input type="text" id="message"></input>
+					<textarea id="message"></textarea>
 					<input type="submit" id="send" value="Send!"></input>
 				</form>
 			</div>
@@ -32,10 +32,10 @@
 		</div>
 
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 		<script src="public/jquery.mousewheel.min.js"></script>
 		<script src="public/jquery.mCustomScrollbar.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			// Wait until DOM is ready
 			$(document).ready(function() {
@@ -53,6 +53,33 @@
 					$('#chatform')[0].reset();
 				});
 
+				function pasteIntoInput(el, text) {
+    				el.focus();
+    				if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+        				var val = el.value;
+        				var selStart = el.selectionStart;
+        				el.value = val.slice(0, selStart) + text + val.slice(el.selectionEnd);
+        				el.selectionEnd = el.selectionStart = selStart + text.length;
+    				} else if (typeof document.selection != "undefined") {
+        				var textRange = document.selection.createRange();
+        				textRange.text = text;
+        				textRange.collapse(false);
+        				textRange.select();
+    				}
+				};
+
+				$('textarea#message').keypress(function(e){
+       				if (e.which == 13 && e.shiftKey) {
+       					pasteIntoInput(this, "\n");
+       					e.preventDefault();
+       				}
+       				else if(e.which == 13){
+           				// submit via ajax or
+           				$('form').submit();
+           				e.preventDefault();
+       				}
+    			});
+
 				socket.on('connect', function(data) {
 					var getName = function() {
 						var nickname = prompt('What is your nickname?');
@@ -60,7 +87,7 @@
 							nickname = prompt('You have to enter a nickname!');
 						}
 						return nickname;
-					}
+					};
 					nickname = getName();
 					$('#status').html('Connected to Chatapp as ' +nickname);
 					socket.emit('join', nickname);
@@ -69,6 +96,10 @@
 				socket.on('connected', function(data) {
 					$('<li class="connected">'+data+'</li>').appendTo('ul.chatlist');
 				});
+
+				socket.on('disconnected', function(data) {
+					$('<li class="disconnected">'+data+'</li>').appendTo('ul.chatlist');
+				})
 
 				// Listen for messages broadcasted to every client by the server - this does not work for some reason.
 				socket.on('messages', function(data) {

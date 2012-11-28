@@ -14,10 +14,9 @@ io.configure(function () {
 
 // Listen for connections
 io.sockets.on('connection', function(socket) {
-
-  console.log("Someone is connecting...");
   
   socket.on('join', function(name) {
+    console.log("Someone is connecting...");
     socket.set('nickname', name);
     console.log(name+" has connected!");
     socket.broadcast.emit('connected', name + ' has connected!');
@@ -26,11 +25,18 @@ io.sockets.on('connection', function(socket) {
 
   // Receive messages from the client and broadcast them to everyone
   socket.on('messages', function(data) {
+    data = data.replace(/\n/g, '<br>');
     socket.get('nickname', function(err, name) {
       socket.broadcast.emit("messages", name + ": " + data);
       socket.emit("messages", name + ": " + data);
     });
+  });
 
+  socket.on('disconnect', function() {
+    socket.get('nickname', function(err, name) {
+      socket.broadcast.emit('disconnected', name + ' has left!');
+      socket.emit('disconnected', name + ' has left!');
+    });
   });
 });
 
