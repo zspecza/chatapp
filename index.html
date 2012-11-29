@@ -84,8 +84,7 @@
 
 				socket.on('connect', function(data) {
 					var getName = function() {
-						// var nickname = prompt('What is your nickname?');
-						var nickname = "Declan";
+						var nickname = prompt('What is your nickname?');
 						while (nickname === null) {
 							nickname = prompt('You have to enter a nickname!');
 						}
