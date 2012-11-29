@@ -49,7 +49,9 @@
 				$('#chatform').submit(function(e) {
 					e.preventDefault();
 					var message = $('#message').val();
-					socket.emit('messages', message);
+					if (message.length > 0) {
+						socket.emit('messages', message);
+					}
 					$('#chatform')[0].reset();
 				});
 
@@ -82,7 +84,8 @@
 
 				socket.on('connect', function(data) {
 					var getName = function() {
-						var nickname = prompt('What is your nickname?');
+						// var nickname = prompt('What is your nickname?');
+						var nickname = "Declan";
 						while (nickname === null) {
 							nickname = prompt('You have to enter a nickname!');
 						}
@@ -97,13 +100,9 @@
 					$('<li class="connected">'+data+'</li>').appendTo('ul.chatlist');
 				});
 
-				socket.on('disconnected', function(data) {
-					$('<li class="disconnected">'+data+'</li>').appendTo('ul.chatlist');
-				})
-
 				// Listen for messages broadcasted to every client by the server - this does not work for some reason.
 				socket.on('messages', function(data) {
-					$('<li>'+data+'</li>').appendTo('ul.chatlist');
+					$('<li class="usermessage">'+data+'</li>').appendTo('ul.chatlist');
 					console.log(data+' messages');
 					$('#chat').mCustomScrollbar("update");
 					$('#chat').mCustomScrollbar("scrollTo", "last");

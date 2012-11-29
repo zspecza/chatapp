@@ -5,6 +5,8 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+var redis = require('redis');
+var client = redis.createClient();
 
 // assuming io is the Socket.IO server object
 io.configure(function () { 
@@ -12,32 +14,39 @@ io.configure(function () {
   io.set("polling duration", 10); 
 });
 
+var storeMessage = function(name, data) {
+  var message = JSON.stringify({name: name, data: data});
+  redisClient.lpush("messages", message, function(err, response) {
+    redisClient.ltrim("messages", 0, 10);
+  });
+};
+
 // Listen for connections
 io.sockets.on('connection', function(socket) {
   
   socket.on('join', function(name) {
+    redisClient.lrange("messages", 0, -1, function(err, messages){
+      messages = messages.reverse();
+      messages.forEach(function(message) {
+        message = JSON.parse(message);
+        socket.emit("messages", '<div id="messagecontainer"><div class="username">' + message.name + ': </div><div class="usermessage">' + message.data + '</div></div>');
+      });
+    });
     console.log("Someone is connecting...");
     socket.set('nickname', name);
     console.log(name+" has connected!");
-    socket.broadcast.emit('connected', name + ' has connected!');
-    socket.emit('connected', name + ' has connected!');
+    socket.emit("connected", name + " joined the chat");
   });
 
   // Receive messages from the client and broadcast them to everyone
   socket.on('messages', function(data) {
-    data = data.replace(/\n/g, '<br>');
+    data = data.replace(/\n/g, '<br />');
     socket.get('nickname', function(err, name) {
-      socket.broadcast.emit("messages", name + ": " + data);
-      socket.emit("messages", name + ": " + data);
+      storeMessage(name, data);
+      socket.emit("messages", '<div id="messagecontainer"><div class="username">' + name + ': </div><div class="usermessage">' + data + '</div></div>');
     });
   });
 
-  socket.on('disconnect', function() {
-    socket.get('nickname', function(err, name) {
-      socket.broadcast.emit('disconnected', name + ' has left!');
-      socket.emit('disconnected', name + ' has left!');
-    });
-  });
 });
 
 // Without this line, the CSS will not work
