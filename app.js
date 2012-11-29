@@ -35,12 +35,14 @@ io.sockets.on('connection', function(socket) {
       messages = messages.reverse();
       messages.forEach(function(message) {
         message = JSON.parse(message);
+        socket.broadcast.emit("messages", '<div id="messagecontainer"><div class="username">' + message.name + ': </div><div class="usermessage">' + message.data + '</div></div>');
         socket.emit("messages", '<div id="messagecontainer"><div class="username">' + message.name + ': </div><div class="usermessage">' + message.data + '</div></div>');
       });
     });
     console.log("Someone is connecting...");
     socket.set('nickname', name);
     console.log(name+" has connected!");
+    socket.broadcast.emit("connected", name + " joined the chat");
     socket.emit("connected", name + " joined the chat");
   });
 
@@ -49,6 +51,7 @@ io.sockets.on('connection', function(socket) {
     data = data.replace(/\n/g, '<br />');
     socket.get('nickname', function(err, name) {
       storeMessage(name, data);
+      socket.broadcast.emit("messages", '<div id="messagecontainer"><div class="username">' + name + ': </div><div class="usermessage">' + data + '</div></div>');
       socket.emit("messages", '<div id="messagecontainer"><div class="username">' + name + ': </div><div class="usermessage">' + data + '</div></div>');
     });
   });
