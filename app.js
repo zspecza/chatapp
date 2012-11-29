@@ -5,8 +5,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-var redis = require('redis');
-var client = redis.createClient();
+var redis = require('redis').createClient();
 
 // assuming io is the Socket.IO server object
 io.configure(function () { 
@@ -16,8 +15,8 @@ io.configure(function () {
 
 var storeMessage = function(name, data) {
   var message = JSON.stringify({name: name, data: data});
-  redisClient.lpush("messages", message, function(err, response) {
-    redisClient.ltrim("messages", 0, 10);
+  redis.lpush("messages", message, function(err, response) {
+    redis.ltrim("messages", 0, 10);
   });
 };
 
@@ -25,7 +24,7 @@ var storeMessage = function(name, data) {
 io.sockets.on('connection', function(socket) {
   
   socket.on('join', function(name) {
-    redisClient.lrange("messages", 0, -1, function(err, messages){
+    redis.lrange("messages", 0, -1, function(err, messages){
       messages = messages.reverse();
       messages.forEach(function(message) {
         message = JSON.parse(message);
