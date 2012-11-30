@@ -50,9 +50,9 @@ io.sockets.on('connection', function(socket) {
   socket.on('messages', function(data) {
     data = data.replace(/\n/g, '<br />');
     socket.get('nickname', function(err, name) {
-      storeMessage(name, data);
       socket.broadcast.emit("messages", '<div id="messagecontainer"><div class="username">' + name + ': </div><div class="usermessage">' + data + '</div></div>');
       socket.emit("messages", '<div id="messagecontainer"><div class="username">' + name + ': </div><div class="usermessage">' + data + '</div></div>');
+      storeMessage(name, data);
     });
   });
 
