@@ -10,7 +10,7 @@
 
 		<div id="wrapper">
 			<div id="online">
-				<ul>
+				<ul class="usersonline">
 
 				</ul>
 			</div>
@@ -87,7 +87,7 @@
 				socket.on('connect', function(data) {
 					var getName = function() {
 						var nickname = prompt('What is your nickname?');
-						while (nickname === null) {
+						while (nickname === null || nickname === "") {
 							nickname = prompt('You have to enter a nickname!');
 						}
 						return nickname;
@@ -112,7 +112,7 @@
 				socket.on('add chatter', insertChatter);
 				var insertChatter = function(name) {
 					var chatter = $('<li>'+name+'</li>').data('name', name);
-					$(chatter).appendTo('#online ul');
+					$(chatter).appendTo('ul.usersonline');
 				}
 			});
 		</script>
