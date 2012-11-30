@@ -39,11 +39,14 @@ io.sockets.on('connection', function(socket) {
         socket.emit("messages", '<div id="messagecontainer"><div class="username">' + message.name + ': </div><div class="usermessage">' + message.data + '</div></div>');
       });
     });
-    console.log("Someone is connecting...");
-    socket.set('nickname', name);
-    console.log(name+" has connected!");
-    socket.broadcast.emit("connected", name + " joined the chat");
-    socket.emit("connected", name + " joined the chat");
+    socket.broadcast.emit("add chatter", name);
+    socket.emit("add chatter", name);
+    redis.smembers('names', function(err, names) {
+      names.forEach(function(name) {
+        socket.emit('add chatter', name);
+      });
+    });
+    redis.sadd("chatters", name);
   });
 
   // Receive messages from the client and broadcast them to everyone

@@ -106,6 +106,12 @@
 					$('#chat').mCustomScrollbar("update");
 					$('#chat').mCustomScrollbar("scrollTo", "last");
 				});
+
+				socket.on('add chatter', insertChatter);
+				var insertChatter = function(name) {
+					var chatter = $('<li>'+name+'</li>').data('name', name);
+					$('#online').append(chatter);
+				}
 			});
 		</script>
 	</body>
