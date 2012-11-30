@@ -39,6 +39,7 @@ io.sockets.on('connection', function(socket) {
         socket.emit("messages", '<div id="messagecontainer"><div class="username">' + message.name + ': </div><div class="usermessage">' + message.data + '</div></div>');
       });
     });
+    socket.set('nickname', name);
     socket.broadcast.emit("add chatter", name);
     socket.emit("add chatter", name);
     redis.smembers('names', function(err, names) {
