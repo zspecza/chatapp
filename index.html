@@ -10,7 +10,9 @@
 
 		<div id="wrapper">
 			<div id="online">
-				
+				<ul>
+
+				</ul>
 			</div>
 
 			<div id="body">
@@ -110,7 +112,7 @@
 				socket.on('add chatter', insertChatter);
 				var insertChatter = function(name) {
 					var chatter = $('<li>'+name+'</li>').data('name', name);
-					$('#online').append(chatter);
+					$(chatter).appendTo('#online ul');
 				}
 			});
 		</script>
