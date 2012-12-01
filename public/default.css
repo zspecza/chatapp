@@ -26,8 +26,8 @@ a {
 
 #body {
     float: left;
-    width: 731px;
-    height: 439px;
+    width: 80%;
+    height: 80%;
     padding: 0;
     border-bottom: 1px solid #000;
 }
@@ -40,14 +40,14 @@ a {
 }
 
 #chat {
-    height: 388px;
+    height: 100%;
     padding: 0px;
 }
 
 #input {
     float: left;
     height: 60px;
-    width: 731px;
+    width: 100%;
 }
 
 .clear {
