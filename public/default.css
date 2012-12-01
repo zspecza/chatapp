@@ -13,15 +13,13 @@ a {
     width:  100%;
     height: 100%;
     padding: 0;
-    border: 1px solid green;
     background: #fff;
-    box-shadow: 4px 4px 20px rgba(0,0,0,0.2), -4px -4px 20px rgba(0,0,0,0.2);
 }
 
 #online {
     float: left;
-    width: 188px;
-    height: 480px;
+    width: 20%;
+    height: 100%;
     padding: 10px;
     border-right: 1px solid #000;
 }
