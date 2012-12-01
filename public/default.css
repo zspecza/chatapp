@@ -10,24 +10,27 @@ a {
 }
 
 #wrapper {
-    width:  100%;
-    height: 100%;
+    margin: 0 auto;
+    width:  940px;
+    height: 500px;
     padding: 0;
+    border: 1px solid #000;
     background: #fff;
+    box-shadow: 4px 4px 20px rgba(0,0,0,0.2), -4px -4px 20px rgba(0,0,0,0.2);
 }
 
 #online {
     float: left;
-    width: 20%;
-    height: 100%;
+    width: 188px;
+    height: 480px;
     padding: 10px;
     border-right: 1px solid #000;
 }
 
 #body {
     float: left;
-    width: 80%;
-    height: 80%;
+    width: 731px;
+    height: 439px;
     padding: 0;
     border-bottom: 1px solid #000;
 }
@@ -40,14 +43,14 @@ a {
 }
 
 #chat {
-    height: 100%;
+    height: 388px;
     padding: 0px;
 }
 
 #input {
     float: left;
     height: 60px;
-    width: 100%;
+    width: 731px;
 }
 
 .clear {
