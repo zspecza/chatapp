@@ -37,12 +37,14 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 		<script src="public/jquery.mousewheel.min.js"></script>
 		<script src="public/jquery.mCustomScrollbar.js"></script>
+		<script src="public/tabindent.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			// Wait until DOM is ready
 			$(document).ready(function() {
 
 				$('#chat').mCustomScrollbar();
+				tabIndent.renderAll();
 
 				// Establish a connection to the server
 				var socket = io.connect(window.location.hostname);
