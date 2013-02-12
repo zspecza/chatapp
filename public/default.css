@@ -61,7 +61,7 @@ h1.title {
     text-align: center;
 }
 
-textarea#message {
+textarea.chat-input {
     float: left;
     margin: 0;
     width: 630px;
@@ -73,11 +73,13 @@ textarea#message {
     resize: none;
 }
 
-textarea#message:focus {
+textarea.chat-input:focus {
     border: none;
     outline: none;
     box-shadow: inset 1px 1px 3px green, inset -1px -1px 3px green;
 }
+
+textarea#message { display: none; }
 
 input#send {
     float: left;
