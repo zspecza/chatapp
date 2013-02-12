@@ -26,7 +26,8 @@
 
 			<div id="input">
 				<form id="chatform">
-					<textarea id="message"></textarea>
+					<textarea class="chat-input" id="nickname" placeholder="Enter a nickname to begin!"></textarea>
+					<textarea class="chat-input" id="message" placeholder="Enter a message!"></textarea>
 					<input type="submit" id="send" value="Send!"></input>
 				</form>
 			</div>
@@ -87,16 +88,29 @@
     			});
 
 				socket.on('connect', function(data) {
-					var getName = function() {
-						var nickname = prompt('What is your nickname?');
-						while (nickname === null || nickname === "") {
-							nickname = prompt('You have to enter a nickname!');
-						}
-						return nickname;
+					var message_box  = $('#message');
+					var nickname_box = $('#nickname');
+
+					message_box.hide();
+
+					var getName = function(callback) {
+						callback($('#nickname').val());
+						
+						nickname_box.hide();
+						message_box.show().val('');
 					};
-					nickname = getName();
-					$('#status').html('Connected to Chatapp as ' +nickname);
-					socket.emit('join', nickname);
+
+					nickname_box.keypress(function(e) {
+						if (e.which == 13) {
+							getName(function(nickname) {
+
+								$('#status').html('Connected to Chatapp as ' +nickname);
+								socket.emit('join', nickname);
+
+							});
+						}
+					});
+					
 				});
 
 				socket.on('connected', function(data) {
