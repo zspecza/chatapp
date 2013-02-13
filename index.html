@@ -50,6 +50,15 @@
 				// Establish a connection to the server
 				var socket = io.connect(window.location.hostname);
 
+				function escapeHTML(unsafe) {
+				    return unsafe
+				         .replace(/&/g, "&amp;")
+				         .replace(/</g, "&lt;")
+				         .replace(/>/g, "&gt;")
+				         .replace(/"/g, "&quot;")
+				         .replace(/'/g, "&#039;");
+				 }
+
 				// On submit, send the chat form message to the server, prevent default redirect and reset the chat form
 				$('#chatform').submit(function(e) {
 					e.preventDefault();
@@ -119,7 +128,12 @@
 
 				// Listen for messages broadcasted to every client by the server - this does not work for some reason.
 				socket.on('messages', function(data) {
-					$('<li class="usermessage">'+data+'</li>').appendTo('ul.chatlist');
+					data = JSON.parse(data);
+					data.message = data.message.replace("<br />", "\n");
+
+					html = '<div id="messagecontainer"><div class="username">' + escapeHTML(data.name) + ': </div><div class="usermessage">' + escapeHTML(data.message) + '</div></div>';
+
+					$('<li class="usermessage">'+html+'</li>').appendTo('ul.chatlist');
 					console.log(data+' messages');
 					$('#chat').mCustomScrollbar("update");
 					$('#chat').mCustomScrollbar("scrollTo", "last");
