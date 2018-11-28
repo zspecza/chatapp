@@ -4,7 +4,7 @@
 	"author": "Declan de Wet",
 	"dependencies": {
 		"express": "4.14.0",
-		"socket.io": "1.6.0",
+		"socket.io": "2.2.0",
 		"redis": "~2.6.3"
 	},
 	"engines": {
